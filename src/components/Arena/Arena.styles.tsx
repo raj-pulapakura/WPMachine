@@ -1,17 +1,15 @@
 import styled from "styled-components/macro";
+import { character } from "../../data/colors";
+const common = `
 
-export const UntouchedCharacter = styled.p`
-  font-family: Consolas;
 `;
 
-export const CurrentCharacter = styled.p`
-  font-family: Consolas;
+export const ArenaContainer = styled.div`
+  margin: 2rem;
 `;
 
-export const IncorrectCharacter = styled.p`
+export const Character = styled.p`
   font-family: Consolas;
-`;
-
-export const CorrectCharacter = styled.p`
-  font-family: Consolas;
+  font-size: 30px;
+  display: inline;
 `;
