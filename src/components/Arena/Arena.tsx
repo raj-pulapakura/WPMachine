@@ -2,15 +2,23 @@ import React, { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getRandomBlock } from "../../data/bank";
-import { updateCurrentBlock } from "../../redux/slices/process";
+import {
+  incrementCurrentCharIndex,
+  startProcess,
+  updateCurrentBlock,
+  updateTimeEnded,
+  updateTimeStarted,
+} from "../../redux/slices/process";
 import { RootState } from "../../redux/store";
-import { ArenaContainer, Character } from "./Arena.styles";
+import { CurrentCharacter } from "../Characters/CurrentCharacter/CurrentCharacter";
+import { UntouchedCharacter } from "../Characters/UntouchedCharacter/UntouchedCharacter";
+import { ArenaContainer } from "./Arena.styles";
 
 interface ArenaProps {}
 
 export const Arena: React.FC<ArenaProps> = ({}) => {
-  const currentBlock = useSelector(
-    (state: RootState) => state.process.currentBlock
+  const { currentBlock, currentCharIndex, started } = useSelector(
+    (state: RootState) => state.process
   );
 
   const dispatch = useDispatch();
@@ -19,15 +27,49 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     dispatch(updateCurrentBlock(getRandomBlock()));
   }, []);
 
+  useEffect(() => {
+    document.addEventListener("keypress", (e) => {
+      if (!started) {
+        dispatch(startProcess());
+      }
+
+      const candidate = e.key;
+
+      if (candidate === " ") {
+        e.preventDefault();
+      }
+
+      console.log(candidate);
+
+      /* MAIN LOGIC */
+
+      // updating current character index
+
+      dispatch(incrementCurrentCharIndex());
+    });
+  }, []);
+
+  useEffect(() => {
+    if (started) {
+      dispatch(updateTimeStarted(Date.now()));
+      setInterval(() => dispatch(updateTimeEnded(Date.now())), 1000);
+    }
+  }, [started]);
+
   const segmentedBlock = Array.from(currentBlock);
+
+  // TODO: Render spaces as normal characters
 
   return (
     <>
-      <h2>Arena</h2>
       <ArenaContainer>
-        {segmentedBlock.map((char, index) => (
-          <Character key={index}>{char}</Character>
-        ))}
+        {segmentedBlock.map((char, index) =>
+          index === currentCharIndex ? (
+            <CurrentCharacter key={index}>{char}</CurrentCharacter>
+          ) : (
+            <UntouchedCharacter key={index}>{char}</UntouchedCharacter>
+          )
+        )}
       </ArenaContainer>
     </>
   );

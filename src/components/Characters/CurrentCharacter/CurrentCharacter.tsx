@@ -1,7 +1,23 @@
-import React from "react";
+import React, { ReactNode } from "react";
+import {
+  Character,
+  Container,
+  Spacing,
+  Underline,
+} from "./CurrentCharacter.styles";
 
-interface CurrentCharacterProps {}
+interface CurrentCharacterProps {
+  children: ReactNode;
+}
 
-export const CurrentCharacter: React.FC<CurrentCharacterProps> = ({}) => {
-  return <div></div>;
+export const CurrentCharacter: React.FC<CurrentCharacterProps> = ({
+  children,
+}) => {
+  return (
+    <Container>
+      <Character>{children}</Character>
+      <Spacing />
+      <Underline />
+    </Container>
+  );
 };
