@@ -11,16 +11,13 @@ export const Container = styled.div`
   display: inline-flex;
 
   margin: 0;
+  margin-bottom: 1rem;
   padding: 0;
-
-  //   background-color: ${character.lightred};
 `;
 
 export const Character = styled.div`
   font-family: Consolas;
   font-size: 30px;
-
-  //   color: ${character.darkred};
 
   display: inline;
 `;

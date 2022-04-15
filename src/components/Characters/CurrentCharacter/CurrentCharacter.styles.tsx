@@ -12,6 +12,7 @@ export const Container = styled.div`
   flex-direction: column;
 
   margin: 0;
+  margin-bottom: 1rem;
   padding: 0;
 `;
 

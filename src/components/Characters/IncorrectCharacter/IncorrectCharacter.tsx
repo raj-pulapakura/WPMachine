@@ -1,7 +1,16 @@
-import React from "react";
+import React, { ReactNode } from "react";
+import { Character, Container } from "./IncorrectCharacter.styles";
 
-interface IncorrectCharacterProps {}
+interface IncorrectCharacterProps {
+  children: ReactNode;
+}
 
-export const IncorrectCharacter: React.FC<IncorrectCharacterProps> = ({}) => {
-  return <div></div>;
+export const IncorrectCharacter: React.FC<IncorrectCharacterProps> = ({
+  children,
+}) => {
+  return (
+    <Container>
+      <Character>{children}</Character>
+    </Container>
+  );
 };
