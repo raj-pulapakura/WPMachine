@@ -29,10 +29,6 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("update", currentCharIndex);
-  }, [currentCharIndex]);
-
   // setting loaded state
   useEffect(() => {
     if (!loaded) {
@@ -64,17 +60,23 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     const currentCharIndex = store.getState().process.currentCharIndex;
     const currentBlock = store.getState().process.currentBlock;
     const incorrectIndexes = store.getState().process.incorrectIndexes;
-    const actual = currentBlock[currentCharIndex];
     const started = store.getState().process.started;
+
+    // this is what the key should be
+    const actual = currentBlock[currentCharIndex];
 
     if (!started) {
       dispatch(startProcess());
     }
 
-    const { key, metaKey, altKey, ctrlKey, shiftKey } = e;
+    const { key } = e;
 
     // handling a backspace
     if (key === "Backspace") {
+      /*     
+      if the previous character is an incorrectIndex, remove it from the incorrectIndex array, 
+      so the user can try again 
+      */
       if (incorrectIndexes.includes(currentCharIndex - 1)) {
         dispatch(
           setIncorrectIndexes(
@@ -83,16 +85,19 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
         );
       }
 
+      // decrement the currentCharIndex
       dispatch(decrementCurrentCharIndex());
       return;
     }
 
     // eliminating characters such as "Shift" and "Delete" etc.
     if (key.length === 1) {
-      console.log({ key, actual });
-
       // the character has been typed correctly
       if (key === actual) {
+        /* 
+        if the currentCharIndex was previously recorded as an incorrectIndex, 
+        remove it from the incorrectIndex array, as it has now been rectified
+        */
         if (incorrectIndexes.includes(currentCharIndex)) {
           dispatch(
             setIncorrectIndexes(
@@ -103,16 +108,24 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       }
       // the character has been typed incorrectly
       else {
+        /* 
+        if the previous character has been typed incorrectly and has not been fixed i.e it is an incorrectIndex, 
+        then do not continue the process, as two adjacent incorrect characters is not allowed
+        */
         if (incorrectIndexes.includes(currentCharIndex - 1)) {
           return;
         }
 
+        /* the character has been typed incorrectly and the previous character has been typed correctly, 
+        so increment the incorrectChars counter and add the currentIndex as an incorrectIndex
+        */
         if (!incorrectIndexes.includes(currentCharIndex)) {
           dispatch(incrementIncorrectChars());
           dispatch(addIncorrectIndex(currentCharIndex));
         }
       }
 
+      // increment the currentCharIndex
       dispatch(incrementCurrentCharIndex());
     }
   }
