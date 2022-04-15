@@ -13,7 +13,7 @@ interface ProcessState {
   ended: boolean;
 }
 
-const initialState = {
+const initialState: ProcessState = {
   loaded: false,
   currentCharIndex: 0,
   currentBlock: "",
@@ -23,7 +23,7 @@ const initialState = {
   incorrectIndexes: [],
   incorrectChars: 0,
   ended: false,
-} as ProcessState;
+};
 
 const processSlice = createSlice({
   name: "process",

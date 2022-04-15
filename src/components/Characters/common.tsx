@@ -1,8 +1,6 @@
-import { characterSpecs } from "../../data/constants";
-
 export const ContainerCommon = `
-width: ${characterSpecs.width};
-  height: ${characterSpecs.height};
+width: 35px;
+  height: 60px;
 
   justify-content: center;
   align-items: center;
@@ -15,7 +13,7 @@ width: ${characterSpecs.width};
 
 export const CharacterCommon = `
   font-family: Consolas;
-  font-size: 30px;
+  font-size: 27.5px;
 
   display: inline;
 `;

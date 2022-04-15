@@ -1,6 +1,5 @@
 import styled from "styled-components/macro";
 import { character } from "../../../data/colors";
-import { characterSpecs } from "../../../data/constants";
 import { CharacterCommon, ContainerCommon } from "../common";
 
 export const Container = styled.div`
