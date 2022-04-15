@@ -1,26 +1,18 @@
 import styled from "styled-components/macro";
 import { character } from "../../../data/colors";
 import { characterSpecs } from "../../../data/constants";
+import { CharacterCommon, ContainerCommon } from "../common";
 
 export const Container = styled.div`
-  width: ${characterSpecs.width};
-  height: ${characterSpecs.height};
+  ${ContainerCommon}
 
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
   flex-direction: column;
-
-  margin: 0;
-  margin-bottom: 1rem;
-  padding: 0;
 `;
 
 export const Character = styled.div`
-  font-family: Consolas;
-  font-size: 30px;
+  ${CharacterCommon}
 
-  display: inline;
+  color: ${character.blue}
 `;
 
 export const Spacing = styled.div`
@@ -30,6 +22,12 @@ export const Spacing = styled.div`
 
 export const Underline = styled.div`
   width: 50%;
-  height: 5px;
-  background-color: ${character.blue};s
+  height: 3px;
+  border-radius: 3px;
+  background-color: ${character.blue};
+
+  animation-name: opacity-fade-in-out;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
 `;

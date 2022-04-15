@@ -13,6 +13,7 @@ import {
   updateTimeEnded,
   updateTimeStarted,
   incrementIncorrectChars,
+  setEnded,
 } from "../../redux/slices/process";
 import store, { RootState } from "../../redux/store";
 import { CorrectCharacter } from "../Characters/CorrectCharacter/CorrectCharacter";
@@ -24,8 +25,14 @@ import { ArenaContainer } from "./Arena.styles";
 interface ArenaProps {}
 
 export const Arena: React.FC<ArenaProps> = ({}) => {
-  const { loaded, currentBlock, currentCharIndex, started, incorrectIndexes } =
-    useSelector((state: RootState) => state.process);
+  const {
+    ended,
+    loaded,
+    currentBlock,
+    currentCharIndex,
+    started,
+    incorrectIndexes,
+  } = useSelector((state: RootState) => state.process);
 
   const dispatch = useDispatch();
 
@@ -51,6 +58,12 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       setInterval(() => dispatch(updateTimeEnded(Date.now())), 1000);
     }
   }, [started]);
+
+  // useEffect(() => {
+  //   if (currentCharIndex >= currentBlock.length) {
+  //     dispatch(setEnded());
+  //   }
+  // }, [currentCharIndex]);
 
   // main logic for handling a key press
   function onKeyUp(e: KeyboardEvent) {
@@ -89,6 +102,8 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       dispatch(decrementCurrentCharIndex());
       return;
     }
+
+    console.log({ key, actual });
 
     // eliminating characters such as "Shift" and "Delete" etc.
     if (key.length === 1) {
