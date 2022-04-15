@@ -12,8 +12,9 @@ import {
   setIncorrectIndexes,
   updateTimeEnded,
   updateTimeStarted,
+  incrementIncorrectChars,
 } from "../../redux/slices/process";
-import { RootState } from "../../redux/store";
+import store, { RootState } from "../../redux/store";
 import { CorrectCharacter } from "../Characters/CorrectCharacter/CorrectCharacter";
 import { CurrentCharacter } from "../Characters/CurrentCharacter/CurrentCharacter";
 import { IncorrectCharacter } from "../Characters/IncorrectCharacter/IncorrectCharacter";
@@ -27,6 +28,10 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     useSelector((state: RootState) => state.process);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("update", currentCharIndex);
+  }, [currentCharIndex]);
 
   // setting loaded state
   useEffect(() => {
@@ -55,26 +60,57 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
   function onKeyUp(e: KeyboardEvent) {
     e.preventDefault();
 
+    // pulling the most recent data from the store
+    const currentCharIndex = store.getState().process.currentCharIndex;
+    const currentBlock = store.getState().process.currentBlock;
+    const incorrectIndexes = store.getState().process.incorrectIndexes;
+    const actual = currentBlock[currentCharIndex];
+    const started = store.getState().process.started;
+
     if (!started) {
       dispatch(startProcess());
     }
 
     const { key, metaKey, altKey, ctrlKey, shiftKey } = e;
-    // console.log({ key, metaKey, altKey, ctrlKey, shiftKey });
 
+    // handling a backspace
     if (key === "Backspace") {
+      if (incorrectIndexes.includes(currentCharIndex - 1)) {
+        dispatch(
+          setIncorrectIndexes(
+            incorrectIndexes.filter((i) => i !== currentCharIndex - 1)
+          )
+        );
+      }
+
       dispatch(decrementCurrentCharIndex());
       return;
     }
-
-    const actual = currentBlock[currentCharIndex];
 
     // eliminating characters such as "Shift" and "Delete" etc.
     if (key.length === 1) {
       console.log({ key, actual });
 
-      if (key !== actual) {
-        dispatch(addIncorrectIndex(currentCharIndex));
+      // the character has been typed correctly
+      if (key === actual) {
+        if (incorrectIndexes.includes(currentCharIndex)) {
+          dispatch(
+            setIncorrectIndexes(
+              incorrectIndexes.filter((i) => i !== currentCharIndex)
+            )
+          );
+        }
+      }
+      // the character has been typed incorrectly
+      else {
+        if (incorrectIndexes.includes(currentCharIndex - 1)) {
+          return;
+        }
+
+        if (!incorrectIndexes.includes(currentCharIndex)) {
+          dispatch(incrementIncorrectChars());
+          dispatch(addIncorrectIndex(currentCharIndex));
+        }
       }
 
       dispatch(incrementCurrentCharIndex());

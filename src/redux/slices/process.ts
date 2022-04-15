@@ -34,7 +34,9 @@ const processSlice = createSlice({
       state.currentCharIndex++;
     },
     decrementCurrentCharIndex(state) {
-      state.currentCharIndex--;
+      if (state.currentCharIndex > 0) {
+        state.currentCharIndex--;
+      }
     },
     updateCurrentBlock(state, action: PayloadAction<string>) {
       state.currentBlock = action.payload;
