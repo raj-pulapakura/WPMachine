@@ -1,14 +1,21 @@
 import React from "react";
-import { Arena } from "./components/Arena/Arena";
-import { Timer } from "./components/Timer/Timer";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ResultsPage } from "./pages/ResultsPage";
+import { TestPage } from "./pages/TestPage";
+
+export const routes = {
+  home: "/",
+  results: "/results",
+};
 
 function App() {
   return (
-    <div>
-      <h1>WPM Machine</h1>
-      <Timer />
-      <Arena />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path={routes.home} element={<TestPage />} />
+        <Route path={routes.results} element={<ResultsPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

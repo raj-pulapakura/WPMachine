@@ -10,5 +10,12 @@ export const bank = [
   `Through the fog and shroud of stirring street lamps I struggle on up the hill, bearing my sluggish burdens. It's a year since my child, whom I loved with all of my newly swelled heart, stopped breathing. Now it's only my chest that swells in time with these agitated footsteps. I've always hated this hill.`,
 ];
 
+export const bankFake = [
+  "creation",
+  "hello there",
+  "this is real",
+  "typing test yay",
+];
+
 export const getRandomBlock = () =>
   bank[Math.floor(Math.random() * bank.length)];

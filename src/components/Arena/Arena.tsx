@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../App";
 import { getRandomBlock } from "../../data/bank";
 import {
   addIncorrectIndex,
@@ -10,11 +12,14 @@ import {
   startProcess,
   updateCurrentBlock,
   setIncorrectIndexes,
-  updateTimeEnded,
-  updateTimeStarted,
   incrementIncorrectChars,
-  setEnded,
+  endProcess,
 } from "../../redux/slices/process";
+import {
+  updateTimeStarted,
+  updateTimeEnded,
+  setIntervalId,
+} from "../../redux/slices/timer";
 import store, { RootState } from "../../redux/store";
 import { CorrectCharacter } from "../Characters/CorrectCharacter/CorrectCharacter";
 import { CurrentCharacter } from "../Characters/CurrentCharacter/CurrentCharacter";
@@ -25,18 +30,16 @@ import { ArenaContainer } from "./Arena.styles";
 interface ArenaProps {}
 
 export const Arena: React.FC<ArenaProps> = ({}) => {
-  const {
-    ended,
-    loaded,
-    currentBlock,
-    currentCharIndex,
-    started,
-    incorrectIndexes,
-  } = useSelector((state: RootState) => state.process);
+  const { loaded, currentBlock, currentCharIndex, started, incorrectIndexes } =
+    useSelector((state: RootState) => state.process);
+
+  const intervalId = useSelector((state: RootState) => state.timer.intervalId);
 
   const dispatch = useDispatch();
 
-  // setting loaded state
+  const navigate = useNavigate();
+
+  // setting key-press event listeners
   useEffect(() => {
     if (!loaded) {
       dispatch(setLoaded());
@@ -51,19 +54,32 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     dispatch(updateCurrentBlock(getRandomBlock()));
   }, []);
 
-  // starting the timer when the user has started typing
+  // timer configuration
   useEffect(() => {
     if (started) {
+      // start timer
       dispatch(updateTimeStarted(Date.now()));
-      setInterval(() => dispatch(updateTimeEnded(Date.now())), 1000);
+      const timerId = setInterval(
+        () => dispatch(updateTimeEnded(Date.now())),
+        1000
+      );
+      dispatch(setIntervalId(timerId));
     }
   }, [started]);
 
-  // useEffect(() => {
-  //   if (currentCharIndex >= currentBlock.length) {
-  //     dispatch(setEnded());
-  //   }
-  // }, [currentCharIndex]);
+  useEffect(() => {
+    if (currentBlock && currentCharIndex >= currentBlock.length) {
+      dispatch(endProcess());
+
+      // clear timer
+      if (intervalId) {
+        console.log("clearing timer");
+        clearInterval(intervalId);
+      }
+
+      navigate(routes.results);
+    }
+  }, [currentCharIndex]);
 
   // main logic for handling a key press
   function onKeyUp(e: KeyboardEvent) {
@@ -102,8 +118,6 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       dispatch(decrementCurrentCharIndex());
       return;
     }
-
-    console.log({ key, actual });
 
     // eliminating characters such as "Shift" and "Delete" etc.
     if (key.length === 1) {

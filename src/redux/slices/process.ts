@@ -6,11 +6,8 @@ interface ProcessState {
   currentCharIndex: number;
   currentBlock: string;
   started: boolean;
-  timeStarted: number;
-  timeEnded: number;
   incorrectIndexes: number[];
   incorrectChars: number;
-  ended: boolean;
 }
 
 const initialState: ProcessState = {
@@ -18,11 +15,8 @@ const initialState: ProcessState = {
   currentCharIndex: 0,
   currentBlock: "",
   started: false,
-  timeStarted: 0,
-  timeEnded: 0,
   incorrectIndexes: [],
   incorrectChars: 0,
-  ended: false,
 };
 
 const processSlice = createSlice({
@@ -46,11 +40,8 @@ const processSlice = createSlice({
     startProcess(state) {
       state.started = true;
     },
-    updateTimeStarted(state, action: PayloadAction<number>) {
-      state.timeStarted = action.payload;
-    },
-    updateTimeEnded(state, action: PayloadAction<number>) {
-      state.timeEnded = action.payload;
+    endProcess(state) {
+      state.started = false;
     },
     incrementIncorrectChars(state) {
       state.incorrectChars++;
@@ -62,9 +53,6 @@ const processSlice = createSlice({
       state.incorrectIndexes.push(action.payload);
       state.incorrectIndexes = cleanseArray(state.incorrectIndexes);
     },
-    setEnded(state) {
-      state.ended = true;
-    },
   },
 });
 
@@ -74,11 +62,9 @@ export const {
   decrementCurrentCharIndex,
   updateCurrentBlock,
   startProcess,
-  updateTimeStarted,
-  updateTimeEnded,
+  endProcess,
   incrementIncorrectChars,
   setIncorrectIndexes,
   addIncorrectIndex,
-  setEnded,
 } = processSlice.actions;
 export default processSlice.reducer;

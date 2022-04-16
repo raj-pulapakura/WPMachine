@@ -15,9 +15,9 @@ interface TimerProps {}
 
 export const Timer: React.FC<TimerProps> = ({}) => {
   const timeStarted = useSelector(
-    (state: RootState) => state.process.timeStarted
+    (state: RootState) => state.timer.timeStarted
   );
-  const timeEnded = useSelector((state: RootState) => state.process.timeEnded);
+  const timeEnded = useSelector((state: RootState) => state.timer.timeEnded);
 
   const started = useSelector((state: RootState) => state.process.started);
 
