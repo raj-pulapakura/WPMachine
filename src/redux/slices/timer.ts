@@ -25,6 +25,11 @@ const timerSlice = createSlice({
     setIntervalId(state, action: PayloadAction<NodeJS.Timer>) {
       state.intervalId = action.payload;
     },
+    clearState(state) {
+      state.timeStarted = 0;
+      state.timeEnded = 0;
+      state.intervalId = undefined;
+    },
   },
 });
 
