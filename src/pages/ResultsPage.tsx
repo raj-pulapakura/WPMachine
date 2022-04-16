@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../App";
 import {
+  clearCalculationState,
   finishCalculating,
   setAccuracy,
   setWPM,
   startCalculating,
 } from "../redux/slices/calculation";
+import { clearProcessState } from "../redux/slices/process";
+import { clearTimerState } from "../redux/slices/timer";
 import { RootState } from "../redux/store";
 import { calculateAccuracy } from "../utils/calculateAccuracy";
 import { calculateWPM } from "../utils/calculateWPM";
@@ -28,6 +33,8 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({}) => {
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(startCalculating());
 
@@ -46,7 +53,11 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({}) => {
   }, [incorrectChars, currentBlock, timeStarted, timeEnded]);
 
   function onRetry() {
-    
+    dispatch(clearProcessState());
+    dispatch(clearTimerState());
+    dispatch(clearCalculationState());
+
+    navigate(routes.home);
   }
 
   return (
@@ -62,7 +73,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({}) => {
           <h3>WPM: {wpm}</h3>
           <h3>Accuracy: {accuracy}</h3>
 
-          <button>Retry test</button>
+          <button onClick={onRetry}>Retry test</button>
         </>
       )}
     </div>

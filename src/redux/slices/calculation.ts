@@ -16,7 +16,7 @@ const calculationSlice = createSlice({
   name: "calculation",
   initialState,
   reducers: {
-    clearState(state) {
+    clearCalculationState(state) {
       state.wpm = 0;
       state.accuracy = 0;
       state.calculating = false;
@@ -36,6 +36,11 @@ const calculationSlice = createSlice({
   },
 });
 
-export const { setAccuracy, setWPM, startCalculating, finishCalculating } =
-  calculationSlice.actions;
+export const {
+  clearCalculationState,
+  setAccuracy,
+  setWPM,
+  startCalculating,
+  finishCalculating,
+} = calculationSlice.actions;
 export default calculationSlice.reducer;

@@ -16,6 +16,11 @@ const timerSlice = createSlice({
   name: "timer",
   initialState,
   reducers: {
+    clearTimerState(state) {
+      state.timeStarted = 0;
+      state.timeEnded = 0;
+      state.intervalId = undefined;
+    },
     updateTimeStarted(state, action: PayloadAction<number>) {
       state.timeStarted = action.payload;
     },
@@ -25,15 +30,14 @@ const timerSlice = createSlice({
     setIntervalId(state, action: PayloadAction<NodeJS.Timer>) {
       state.intervalId = action.payload;
     },
-    clearState(state) {
-      state.timeStarted = 0;
-      state.timeEnded = 0;
-      state.intervalId = undefined;
-    },
   },
 });
 
-export const { updateTimeEnded, updateTimeStarted, setIntervalId } =
-  timerSlice.actions;
+export const {
+  clearTimerState,
+  updateTimeEnded,
+  updateTimeStarted,
+  setIntervalId,
+} = timerSlice.actions;
 
 export default timerSlice.reducer;

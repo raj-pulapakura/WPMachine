@@ -23,8 +23,8 @@ const processSlice = createSlice({
   name: "process",
   initialState,
   reducers: {
-    clearState(state) {
-      state.loaded = false;
+    clearProcessState(state) {
+      state.loaded = true;
       state.currentCharIndex = 0;
       state.currentBlock = "";
       state.started = false;
@@ -65,6 +65,7 @@ const processSlice = createSlice({
 });
 
 export const {
+  clearProcessState,
   setLoaded,
   incrementCurrentCharIndex,
   decrementCurrentCharIndex,
