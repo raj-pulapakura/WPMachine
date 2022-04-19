@@ -4,4 +4,6 @@ export const character = {
   lightred: "#FFDDDD",
   darkred: "#BB0303",
   blue: "#35BAF6",
+  lightyellow: "#FFF5DD",
+  darkyellow: "#887702",
 };

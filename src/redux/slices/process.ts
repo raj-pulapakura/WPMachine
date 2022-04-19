@@ -8,6 +8,8 @@ interface ProcessState {
   started: boolean;
   incorrectIndexes: number[];
   incorrectChars: number;
+  shiftActivated: boolean;
+  capsLockActivated: boolean;
 }
 
 const initialState: ProcessState = {
@@ -17,6 +19,8 @@ const initialState: ProcessState = {
   started: false,
   incorrectIndexes: [],
   incorrectChars: 0,
+  shiftActivated: false,
+  capsLockActivated: false,
 };
 
 const processSlice = createSlice({
@@ -61,6 +65,18 @@ const processSlice = createSlice({
       state.incorrectIndexes.push(action.payload);
       state.incorrectIndexes = cleanseArray(state.incorrectIndexes);
     },
+    activateShift(state) {
+      state.shiftActivated = true;
+    },
+    deactivateShift(state) {
+      state.shiftActivated = false;
+    },
+    activateCapsLock(state) {
+      state.capsLockActivated = true;
+    },
+    deactivateCapsLock(state) {
+      state.capsLockActivated = false;
+    },
   },
 });
 
@@ -75,5 +91,9 @@ export const {
   incrementIncorrectChars,
   setIncorrectIndexes,
   addIncorrectIndex,
+  activateShift,
+  deactivateShift,
+  activateCapsLock,
+  deactivateCapsLock,
 } = processSlice.actions;
 export default processSlice.reducer;

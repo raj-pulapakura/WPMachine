@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../App";
 import { getRandomBlock } from "../../data/bank";
+import { uppers } from "../../data/uppers";
 import {
   addIncorrectIndex,
   decrementCurrentCharIndex,
@@ -14,6 +15,10 @@ import {
   setIncorrectIndexes,
   incrementIncorrectChars,
   endProcess,
+  activateShift,
+  deactivateShift,
+  deactivateCapsLock,
+  activateCapsLock,
 } from "../../redux/slices/process";
 import {
   updateTimeStarted,
@@ -86,10 +91,14 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     e.preventDefault();
 
     // pulling the most recent data from the store
-    const currentCharIndex = store.getState().process.currentCharIndex;
-    const currentBlock = store.getState().process.currentBlock;
-    const incorrectIndexes = store.getState().process.incorrectIndexes;
-    const started = store.getState().process.started;
+    const {
+      currentCharIndex,
+      currentBlock,
+      incorrectIndexes,
+      started,
+      shiftActivated,
+      capsLockActivated,
+    } = store.getState().process;
 
     // this is what the key should be
     const actual = currentBlock[currentCharIndex];
@@ -99,6 +108,8 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     }
 
     const { key } = e;
+
+    console.log({ key, actual });
 
     // handling a backspace
     if (key === "Backspace") {
@@ -119,6 +130,23 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       return;
     }
 
+    if (key === "Shift") {
+      if (!shiftActivated) {
+        dispatch(activateShift());
+        return;
+      }
+    }
+
+    if (key === "CapsLock") {
+      console.log("capslock clicked");
+      if (capsLockActivated) {
+        dispatch(deactivateCapsLock());
+      } else {
+        dispatch(activateCapsLock());
+      }
+      return;
+    }
+
     // eliminating characters such as "Shift" and "Delete" etc.
     if (key.length === 1) {
       // the character has been typed correctly
@@ -134,9 +162,25 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
             )
           );
         }
+      } else if (shiftActivated && uppers[key] === actual) {
+        /* 
+        if the currentCharIndex was previously recorded as an incorrectIndex, 
+        remove it from the incorrectIndex array, as it has now been rectified
+        */
+        if (incorrectIndexes.includes(currentCharIndex)) {
+          dispatch(
+            setIncorrectIndexes(
+              incorrectIndexes.filter((i) => i !== currentCharIndex)
+            )
+          );
+        }
+
+        dispatch(deactivateShift());
       }
+
       // the character has been typed incorrectly
       else {
+        dispatch(deactivateShift());
         /* 
         if the previous character has been typed incorrectly and has not been fixed i.e it is an incorrectIndex, 
         then do not continue the process, as two adjacent incorrect characters is not allowed
@@ -166,50 +210,68 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     }
   }
 
+  const characterArray: JSX.Element[] = [];
+
+  const containerWidth = 720;
+  const characterWidth = 30;
+
+  let control = 0;
+
+  Array.from(currentBlock).forEach((char, index) => {
+    control += characterWidth;
+
+    if (index === currentCharIndex) {
+      if (char === " ") {
+        characterArray.push(
+          <CurrentCharacter key={index}>&nbsp;</CurrentCharacter>
+        );
+      } else {
+        characterArray.push(
+          <CurrentCharacter key={index}>{char}</CurrentCharacter>
+        );
+      }
+    } else if (index < currentCharIndex) {
+      // character has been typed incorrectly
+      if (incorrectIndexes.includes(index)) {
+        if (char === " ") {
+          characterArray.push(
+            <IncorrectCharacter key={index}>&nbsp;</IncorrectCharacter>
+          );
+        } else {
+          characterArray.push(
+            <IncorrectCharacter key={index}>{char}</IncorrectCharacter>
+          );
+        }
+      }
+      // character has been typed correctly
+      else {
+        if (char === " ") {
+          characterArray.push(
+            <CorrectCharacter key={index}>&nbsp;</CorrectCharacter>
+          );
+        } else {
+          characterArray.push(
+            <CorrectCharacter key={index}>{char}</CorrectCharacter>
+          );
+        }
+      }
+    } else {
+      // character has not been typed yet
+      if (char === "") {
+        characterArray.push(
+          <UntouchedCharacter key={index}>&nbsp;</UntouchedCharacter>
+        );
+      } else {
+        characterArray.push(
+          <UntouchedCharacter key={index}>{char}</UntouchedCharacter>
+        );
+      }
+    }
+  });
+
   return (
     <>
-      <ArenaContainer>
-        {Array.from(currentBlock).map((char, index) => {
-          // character is the current character
-          if (index === currentCharIndex) {
-            if (char === " ") {
-              return <CurrentCharacter key={index}>&nbsp;</CurrentCharacter>;
-            } else {
-              return <CurrentCharacter key={index}>{char}</CurrentCharacter>;
-            }
-          }
-
-          if (index < currentCharIndex) {
-            // character has been typed incorrectly
-            if (incorrectIndexes.includes(index)) {
-              if (char === " ") {
-                return (
-                  <IncorrectCharacter key={index}>&nbsp;</IncorrectCharacter>
-                );
-              } else {
-                return (
-                  <IncorrectCharacter key={index}>{char}</IncorrectCharacter>
-                );
-              }
-            }
-            // character has been typed correctly
-            else {
-              if (char === " ") {
-                return <CorrectCharacter key={index}>&nbsp;</CorrectCharacter>;
-              } else {
-                return <CorrectCharacter key={index}>{char}</CorrectCharacter>;
-              }
-            }
-          }
-
-          // character has not been typed yet
-          if (char === "") {
-            return <UntouchedCharacter key={index}>&nbsp;</UntouchedCharacter>;
-          } else {
-            return <UntouchedCharacter key={index}>{char}</UntouchedCharacter>;
-          }
-        })}
-      </ArenaContainer>
+      <ArenaContainer>{characterArray}</ArenaContainer>
     </>
   );
 };

@@ -1,15 +1,15 @@
 export const ContainerCommon = `
-width: 35px;
+width: 30px;
   height: 60px;
 
   justify-content: center;
   align-items: center;
   display: inline-flex;
 
-  margin: 0 0.1rem 1rem 0;
+  margin: 0 0.1rem 0.5rem 0;
   padding: 0;
   border-radius: 0.5rem;
-`;
+  `;
 
 export const CharacterCommon = `
   font-family: Consolas;
