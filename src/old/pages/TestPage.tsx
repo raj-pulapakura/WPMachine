@@ -5,7 +5,7 @@ import { CapsLockBanner } from "../components/CapsLockBanner/CapsLockBanner";
 import { StatusBanner } from "../components/StatusBanner/StatusBanner";
 import { StatusBar } from "../components/StatusBar/StatusBar";
 import { Timer } from "../components/Timer/Timer";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 
 interface TestPageProps {}
 

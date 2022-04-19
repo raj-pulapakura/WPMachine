@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../../App";
+import { routes } from "../../../App";
 import { getRandomBlock } from "../../data/bank";
 import { uppers } from "../../data/uppers";
 import {
@@ -19,13 +19,13 @@ import {
   deactivateShift,
   deactivateCapsLock,
   activateCapsLock,
-} from "../../redux/slices/process";
+} from "../../../redux/slices/process";
 import {
   updateTimeStarted,
   updateTimeEnded,
   setIntervalId,
-} from "../../redux/slices/timer";
-import store, { RootState } from "../../redux/store";
+} from "../../../redux/slices/timer";
+import store, { RootState } from "../../../redux/store";
 import { CorrectCharacter } from "../Characters/CorrectCharacter/CorrectCharacter";
 import { CurrentCharacter } from "../Characters/CurrentCharacter/CurrentCharacter";
 import { IncorrectCharacter } from "../Characters/IncorrectCharacter/IncorrectCharacter";

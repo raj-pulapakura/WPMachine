@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { formatSeconds } from "../../utils/formatSeconds";
+import { RootState } from "../../../redux/store";
+import { formatSeconds } from "../../../utils/formatSeconds";
 import { Text } from "./Timer.styles";
 
 interface TimerProps {}

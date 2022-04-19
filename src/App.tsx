@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ResultsPage } from "./pages/ResultsPage";
-import { TestPage } from "./pages/TestPage";
+import { ResultsPage } from "./old/pages/ResultsPage";
+import { TestPage } from "./old/pages/TestPage";
 
 export const routes = {
   home: "/",
@@ -10,12 +10,15 @@ export const routes = {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={routes.home} element={<TestPage />} />
-        <Route path={routes.results} element={<ResultsPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <h1>Hello</h1>
+    </div>
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route path={routes.home} element={<TestPage />} />
+    //     <Route path={routes.results} element={<ResultsPage />} />
+    //   </Routes>
+    // </BrowserRouter>
   );
 }
 

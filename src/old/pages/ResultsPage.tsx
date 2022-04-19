@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../App";
+import { routes } from "../../App";
 import {
   clearCalculationState,
   finishCalculating,
   setAccuracy,
   setWPM,
   startCalculating,
-} from "../redux/slices/calculation";
-import { clearProcessState } from "../redux/slices/process";
-import { clearTimerState } from "../redux/slices/timer";
-import { RootState } from "../redux/store";
-import { calculateAccuracy } from "../utils/calculateAccuracy";
-import { calculateWPM } from "../utils/calculateWPM";
-import { separateSeconds } from "../utils/separateSeconds";
+} from "../../redux/slices/calculation";
+import { clearProcessState } from "../../redux/slices/process";
+import { clearTimerState } from "../../redux/slices/timer";
+import { RootState } from "../../redux/store";
+import { calculateAccuracy } from "../../utils/calculateAccuracy";
+import { calculateWPM } from "../../utils/calculateWPM";
+import { separateSeconds } from "../../utils/separateSeconds";
 
 interface ResultsPageProps {}
 
