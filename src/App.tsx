@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ResultsPage } from "./old/pages/ResultsPage";
-import { TestPage } from "./old/pages/TestPage";
+import { ResultsPage } from "../old/pages/ResultsPage";
+import { TestPage } from "../old/pages/TestPage";
+import { Arena } from "./components/Arena/Arena";
 
 export const routes = {
   home: "/",
@@ -11,7 +12,8 @@ export const routes = {
 function App() {
   return (
     <div>
-      <h1>Hello</h1>
+      <h1>WPMachine</h1>
+      <Arena />
     </div>
     // <BrowserRouter>
     //   <Routes>

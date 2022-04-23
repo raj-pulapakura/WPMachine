@@ -1,99 +1,73 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { cleanseArray } from "../../utils/cleanseArray";
+import { textChangeRangeIsUnchanged } from "typescript";
 
 interface ProcessState {
+  testText: string;
+  testTextSplit: string[];
+  currentWordIndex: number;
+  currentCharacterIndex: number;
   loaded: boolean;
-  currentCharIndex: number;
-  currentBlock: string;
-  started: boolean;
-  incorrectIndexes: number[];
-  incorrectChars: number;
-  shiftActivated: boolean;
-  capsLockActivated: boolean;
+  spaceRequired: boolean;
 }
 
 const initialState: ProcessState = {
+  testText: "",
+  testTextSplit: [],
+  currentWordIndex: 0,
+  currentCharacterIndex: 0,
   loaded: false,
-  currentCharIndex: 0,
-  currentBlock: "",
-  started: false,
-  incorrectIndexes: [],
-  incorrectChars: 0,
-  shiftActivated: false,
-  capsLockActivated: false,
+  spaceRequired: false,
 };
 
 const processSlice = createSlice({
   name: "process",
   initialState,
   reducers: {
-    clearProcessState(state) {
-      state.loaded = true;
-      state.currentCharIndex = 0;
-      state.currentBlock = "";
-      state.started = false;
-      state.incorrectIndexes = [];
-      state.incorrectChars = 0;
+    setTestText(state, action: PayloadAction<string>) {
+      state.testText = action.payload;
+      state.testTextSplit = action.payload.split(" ");
     },
-    setLoaded(state) {
-      state.loaded = true;
+    setCurrentWordIndex(state, action: PayloadAction<number>) {
+      state.currentWordIndex = action.payload;
     },
-    incrementCurrentCharIndex(state) {
-      state.currentCharIndex++;
+    setCurrentCharIndex(state, action: PayloadAction<number>) {
+      state.currentCharacterIndex = action.payload;
     },
-    decrementCurrentCharIndex(state) {
-      if (state.currentCharIndex > 0) {
-        state.currentCharIndex--;
-      }
+    setLoaded(state, action: PayloadAction<boolean>) {
+      state.loaded = action.payload;
     },
-    updateCurrentBlock(state, action: PayloadAction<string>) {
-      state.currentBlock = action.payload;
+    incrementCurrentWordIndex(state) {
+      state.currentWordIndex++;
     },
-    startProcess(state) {
-      state.started = true;
+    decrementCurrentWordIndex(state) {
+      state.currentWordIndex--;
     },
-    endProcess(state) {
-      state.started = false;
+
+    incrementCurrentCharacterIndex(state) {
+      state.currentCharacterIndex++;
     },
-    incrementIncorrectChars(state) {
-      state.incorrectChars++;
+    decrementCurrentCharacterIndex(state) {
+      state.currentCharacterIndex--;
     },
-    setIncorrectIndexes(state, action: PayloadAction<number[]>) {
-      state.incorrectIndexes = cleanseArray(action.payload);
+    resetCurrentCharacterIndex(state) {
+      state.currentCharacterIndex = 0;
     },
-    addIncorrectIndex(state, action: PayloadAction<number>) {
-      state.incorrectIndexes.push(action.payload);
-      state.incorrectIndexes = cleanseArray(state.incorrectIndexes);
-    },
-    activateShift(state) {
-      state.shiftActivated = true;
-    },
-    deactivateShift(state) {
-      state.shiftActivated = false;
-    },
-    activateCapsLock(state) {
-      state.capsLockActivated = true;
-    },
-    deactivateCapsLock(state) {
-      state.capsLockActivated = false;
+    setSpaceRequired(state, action: PayloadAction<boolean>) {
+      state.spaceRequired = action.payload;
     },
   },
 });
 
 export const {
-  clearProcessState,
+  setTestText,
+  setCurrentWordIndex,
+  setCurrentCharIndex,
   setLoaded,
-  incrementCurrentCharIndex,
-  decrementCurrentCharIndex,
-  updateCurrentBlock,
-  startProcess,
-  endProcess,
-  incrementIncorrectChars,
-  setIncorrectIndexes,
-  addIncorrectIndex,
-  activateShift,
-  deactivateShift,
-  activateCapsLock,
-  deactivateCapsLock,
+  incrementCurrentCharacterIndex,
+  incrementCurrentWordIndex,
+  decrementCurrentCharacterIndex,
+  decrementCurrentWordIndex,
+  setSpaceRequired,
+  resetCurrentCharacterIndex,
 } = processSlice.actions;
 export default processSlice.reducer;
