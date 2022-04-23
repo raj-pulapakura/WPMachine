@@ -7,6 +7,12 @@ import { handleIncorrectCharacter } from "../../handlers/handleIncorrectCharacte
 import { handleShift } from "../../handlers/handleShift";
 import handleSpace from "../../handlers/handleSpace";
 import { setLoaded, setTestText } from "../../redux/slices/process";
+import {
+  setIntervalId,
+  startTimer,
+  updateTimeEnded,
+  updateTimeStarted,
+} from "../../redux/slices/timer";
 import store, { RootState } from "../../redux/store";
 import {
   ArenaCharacter,
@@ -22,12 +28,15 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
   const { loaded, currentWordIndex, currentCharacterIndex, testTextSplit } =
     useSelector((state: RootState) => state.process);
 
+  const timerHasStarted = useSelector(
+    (state: RootState) => state.timer.timerHasStarted
+  );
+
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
-
   const currentCharElRef = useRef<HTMLDivElement>(null);
 
+  // attach event listeners
   useEffect(() => {
     if (!loaded) {
       dispatch(setLoaded(true));
@@ -35,6 +44,18 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       document.addEventListener("keypress", onKeyPressed);
     }
   }, [dispatch, loaded]);
+
+  // start timer
+  useEffect(() => {
+    if (timerHasStarted) {
+      dispatch(updateTimeStarted(Date.now()));
+      const timerId = setInterval(
+        () => dispatch(updateTimeEnded(Date.now())),
+        1000
+      );
+      dispatch(setIntervalId(timerId));
+    }
+  }, [timerHasStarted]);
 
   useEffect(() => {
     dispatch(setTestText(getRandomBlock()));
@@ -60,6 +81,10 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
 
     if (key.length > 1) {
       return;
+    }
+
+    if (!timerHasStarted) {
+      dispatch(startTimer());
     }
 
     if (key === " ") {
