@@ -1,0 +1,57 @@
+* {
+    font-family: "Work Sans"
+}
+
+.host {
+    position: relative;
+}
+
+:root {
+    --top-inc: 30px;
+    --left-inc: 0px;
+}
+
+.animate {
+    animation-name: jiggle-animation;
+    animation-duration: 500ms;
+
+    position: absolute;
+
+    top: var(--top-inc);
+    left: var(--left-inc);
+
+    color: rgb(255, 92, 92)
+}
+
+@keyframes jiggle-animation {
+    10% {
+        left: calc(var(--left-inc) - 5px);
+    }
+    20% {
+        left: calc(var(--left-inc) + 5px);
+    }
+    30% {
+        left: calc(var(--left-inc) - 5px);
+    }
+    40% {
+        left: calc(var(--left-inc) + 5px);
+    }
+    50% {
+        left: calc(var(--left-inc) - 2px);
+    }
+    60% {
+        left: calc(var(--left-inc) + 2px);
+    }
+    70% {
+        left: calc(var(--left-inc) - 1px);
+    }
+    80% {
+        left: calc(var(--left-inc) + 1px);
+    }
+    90% {
+        left: calc(var(--left-inc) - 1px);
+    }
+    100% {  
+        left: var(--left-inc);
+    }
+}

@@ -9,7 +9,7 @@ export function handleCorrectCharacter(dispatch: Dispatch<any>) {
   const { currentCharacterIndex, currentWordIndex, testTextSplit } =
     store.getState().process;
 
-  console.log("Hooray!");
+  console.log("Hooray!  ");
 
   // the word has come to an end
   if (currentCharacterIndex === testTextSplit[currentWordIndex].length - 1) {

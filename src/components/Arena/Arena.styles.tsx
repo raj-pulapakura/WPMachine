@@ -11,6 +11,8 @@ export const ArenaCharacter = styled.div<{ color?: string }>`
   font-family: Consolas;
   font-weight: 400;
   color: ${(props) => props.color || "inherit"};
+
+  position: relative;
 `;
 
 export const ArenaWord = styled.div`
@@ -20,8 +22,8 @@ export const ArenaWord = styled.div`
 export const ArenaWordWrapper = styled.div`
   display: inline-flex;
   flex-direction: column;
-  gap: 1rem;
   margin-bottom: 1rem;
+  gap: 1rem;
 `;
 
 export const GhostWord = styled.div<{ color: string }>`

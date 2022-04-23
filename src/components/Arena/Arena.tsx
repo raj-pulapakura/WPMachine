@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRandomBlock } from "../../data/bank";
 import { handleCorrectCharacter } from "../../handlers/handleCorrectCharacter";
@@ -21,6 +21,8 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
     useSelector((state: RootState) => state.process);
 
   const dispatch = useDispatch();
+
+  const currentCharElRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loaded) {
@@ -59,6 +61,7 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
       handleCorrectCharacter(dispatch);
     } else {
       handleIncorrectCharacter(dispatch);
+      triggerIncorrectCharAnimation(key);
     }
   }
 
@@ -66,6 +69,23 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
   function onKeyPressed(e: KeyboardEvent) {
     if (e.key === " ") {
       e.preventDefault();
+    }
+  }
+
+  function triggerIncorrectCharAnimation(key: string) {
+    const element = currentCharElRef.current;
+
+    if (element) {
+      const errorText = document.createElement("span");
+
+      errorText.textContent = key;
+      errorText.classList.add("animate");
+
+      element.insertAdjacentElement("beforeend", errorText);
+
+      setTimeout(() => {
+        errorText.remove();
+      }, 500);
     }
   }
 
@@ -77,21 +97,30 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
             {index === currentWordIndex ? (
               <>
                 <ArenaWord>
-                  {Array.from(word).map((char, index) => (
-                    <ArenaCharacter
-                      key={index}
-                      color={index === currentCharacterIndex ? "blue" : "black"}
-                    >
-                      {char}
-                    </ArenaCharacter>
-                  ))}
+                  {Array.from(word).map((char, index) =>
+                    index === currentCharacterIndex ? (
+                      <ArenaCharacter
+                        ref={currentCharElRef}
+                        key={index}
+                        color="blue"
+                      >
+                        {char}
+                      </ArenaCharacter>
+                    ) : (
+                      <ArenaCharacter key={index} color="black">
+                        {char}
+                      </ArenaCharacter>
+                    )
+                  )}
                   &nbsp;
                 </ArenaWord>
                 <GhostWord color="grey">
                   {Array.from(word).map((char, index) => (
                     <ArenaCharacter
                       key={index}
-                      color={index < currentCharacterIndex ? "black" : "grey"}
+                      color={
+                        index < currentCharacterIndex ? "limegreen" : "grey"
+                      }
                     >
                       {char}
                     </ArenaCharacter>
