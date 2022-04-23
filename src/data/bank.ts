@@ -9,4 +9,4 @@ export const bank = [
 ];
 
 export const getRandomBlock = () =>
-  bank[Math.floor(Math.random() * bank.length)].toLowerCase();
+  bank[Math.floor(Math.random() * bank.length)];

@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ResultsPage } from "../old/pages/ResultsPage";
-import { TestPage } from "../old/pages/TestPage";
-import { Arena } from "./components/Arena/Arena";
+import { MainPage } from "./pages/MainPage";
+import { ResultsPage } from "./pages/ResultsPage";
 
 export const routes = {
   home: "/",
@@ -11,16 +10,12 @@ export const routes = {
 
 function App() {
   return (
-    <div>
-      <h1>WPMachine</h1>
-      <Arena />
-    </div>
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path={routes.home} element={<TestPage />} />
-    //     <Route path={routes.results} element={<ResultsPage />} />
-    //   </Routes>
-    // </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path={routes.home} element={<MainPage />} />
+        <Route path={routes.results} element={<ResultsPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

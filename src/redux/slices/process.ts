@@ -8,6 +8,12 @@ interface ProcessState {
   currentCharacterIndex: number;
   loaded: boolean;
   spaceRequired: boolean;
+  shiftActivated: boolean;
+  incorrectAttempts: number;
+  mostRecentIncorrectIndex: {
+    charIndex: number | null;
+    wordIndex: number | null;
+  };
 }
 
 const initialState: ProcessState = {
@@ -17,6 +23,12 @@ const initialState: ProcessState = {
   currentCharacterIndex: 0,
   loaded: false,
   spaceRequired: false,
+  shiftActivated: false,
+  incorrectAttempts: 0,
+  mostRecentIncorrectIndex: {
+    charIndex: null,
+    wordIndex: null,
+  },
 };
 
 const processSlice = createSlice({
@@ -42,7 +54,6 @@ const processSlice = createSlice({
     decrementCurrentWordIndex(state) {
       state.currentWordIndex--;
     },
-
     incrementCurrentCharacterIndex(state) {
       state.currentCharacterIndex++;
     },
@@ -54,6 +65,21 @@ const processSlice = createSlice({
     },
     setSpaceRequired(state, action: PayloadAction<boolean>) {
       state.spaceRequired = action.payload;
+    },
+    activateShift(state) {
+      state.shiftActivated = true;
+    },
+    deactivateShift(state) {
+      state.shiftActivated = false;
+    },
+    incrementIncorrectAttempts(state) {
+      state.incorrectAttempts++;
+    },
+    updateMostRecentIncorrectIndex(
+      state,
+      action: PayloadAction<ProcessState["mostRecentIncorrectIndex"]>
+    ) {
+      state.mostRecentIncorrectIndex = action.payload;
     },
   },
 });
@@ -69,5 +95,9 @@ export const {
   decrementCurrentWordIndex,
   setSpaceRequired,
   resetCurrentCharacterIndex,
+  activateShift,
+  deactivateShift,
+  incrementIncorrectAttempts,
+  updateMostRecentIncorrectIndex,
 } = processSlice.actions;
 export default processSlice.reducer;

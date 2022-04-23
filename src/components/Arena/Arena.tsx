@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getRandomBlock } from "../../data/bank";
 import { handleCorrectCharacter } from "../../handlers/handleCorrectCharacter";
 import { handleIncorrectCharacter } from "../../handlers/handleIncorrectCharacter";
+import { handleShift } from "../../handlers/handleShift";
 import handleSpace from "../../handlers/handleSpace";
 import { setLoaded, setTestText } from "../../redux/slices/process";
 import store, { RootState } from "../../redux/store";
@@ -22,6 +24,8 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   const currentCharElRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,25 +44,31 @@ export const Arena: React.FC<ArenaProps> = ({}) => {
   function onKeyUp(e: KeyboardEvent) {
     e.preventDefault();
 
-    const { currentCharacterIndex, currentWordIndex, testTextSplit } =
-      store.getState().process;
+    const {
+      currentCharacterIndex,
+      currentWordIndex,
+      testTextSplit,
+      shiftActivated,
+    } = store.getState().process;
 
     const key = e.key;
     const actual = testTextSplit[currentWordIndex][currentCharacterIndex];
 
+    if (key === "Shift") {
+      handleShift(dispatch);
+    }
+
     if (key.length > 1) {
       return;
     }
-
-    console.log({ key, actual });
 
     if (key === " ") {
       handleSpace(dispatch);
       return;
     }
 
-    if (key === actual) {
-      handleCorrectCharacter(dispatch);
+    if (key === actual || (shiftActivated && key.toUpperCase() === actual)) {
+      handleCorrectCharacter(dispatch, navigate);
     } else {
       handleIncorrectCharacter(dispatch);
       triggerIncorrectCharAnimation(key);
