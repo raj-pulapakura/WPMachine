@@ -2,8 +2,9 @@ import styled from "styled-components/macro";
 
 export const ArenaContainer = styled.div`
   margin: auto;
-  background-color: #fefefe;
-  width: 720px;
+  width: min(90%, 1000px);
+  border: solid 2px black;
+  padding: 2rem;
 `;
 
 export const ArenaCharacter = styled.div<{ color?: string }>`

@@ -22,6 +22,7 @@ const timerSlice = createSlice({
       state.timeStarted = 0;
       state.timeEnded = 0;
       state.intervalId = undefined;
+      state.timerHasStarted = false;
     },
     updateTimeStarted(state, action: PayloadAction<number>) {
       state.timeStarted = action.payload;

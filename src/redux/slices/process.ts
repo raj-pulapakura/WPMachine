@@ -35,6 +35,20 @@ const processSlice = createSlice({
   name: "process",
   initialState,
   reducers: {
+    clearProcessState(state) {
+      state.testText = "";
+      state.testTextSplit = [];
+      state.currentCharacterIndex = 0;
+      state.currentWordIndex = 0;
+      state.loaded = false;
+      state.spaceRequired = false;
+      state.shiftActivated = false;
+      state.incorrectAttempts = 0;
+      state.mostRecentIncorrectIndex = {
+        charIndex: null,
+        wordIndex: null,
+      };
+    },
     setTestText(state, action: PayloadAction<string>) {
       state.testText = action.payload;
       state.testTextSplit = action.payload.split(" ");
@@ -85,6 +99,7 @@ const processSlice = createSlice({
 });
 
 export const {
+  clearProcessState,
   setTestText,
   setCurrentWordIndex,
   setCurrentCharIndex,
